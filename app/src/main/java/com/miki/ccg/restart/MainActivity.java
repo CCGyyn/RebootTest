@@ -6,11 +6,14 @@ import android.os.PowerManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
+    private final String TAG = MainActivity.class.getSimpleName();
     Button rebootTest;
 
     @Override
@@ -30,6 +33,14 @@ public class MainActivity extends AppCompatActivity {
                                 // 重启
                                 PowerManager powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
                                 powerManager.reboot("重启");
+                                /*String cmd = "su -c reboot";
+                                try {
+                                    myLog("进入try启动runtime");
+                                    Runtime.getRuntime().exec("reboot");
+                                    myLog("执行完成");
+                                } catch (Exception e) {
+                                    Toast.makeText(getApplicationContext(), "Error! Fail to reboot.", Toast.LENGTH_SHORT).show();
+                                }*/
                             }
                         })
                         .setNegativeButton("取消", new DialogInterface.OnClickListener() {
@@ -41,5 +52,9 @@ public class MainActivity extends AppCompatActivity {
                         }).show();
             }
         });
+    }
+
+    private void myLog(String msg) {
+        Log.d(TAG, msg);
     }
 }
