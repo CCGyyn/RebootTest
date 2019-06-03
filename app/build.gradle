@@ -10,6 +10,14 @@ android {
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
+/*    signingConfigs {
+        release {
+            storeFile file('D:\\miki\\sign\\platform.keystore')
+            storePassword 'android'
+//            keyAlias 'keyAlias'
+            keyPassword 'android'
+        }
+    }*/
     buildTypes {
         release {
             minifyEnabled false

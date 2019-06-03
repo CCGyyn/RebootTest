@@ -5,12 +5,35 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
-
+<!--    <Button
+        android:id="@+id/setting"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="设置"
+        />
     <Button
         android:id="@+id/reboot_test"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="重启测试"
+        app:layout_constraintTop_toBottomOf="@+id/setting"
         />
-
+    <Button
+        android:id="@+id/notify"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Notify"
+        android:textAllCaps="false"
+        app:layout_constraintTop_toBottomOf="@+id/reboot_test"
+        />-->
+    <Button
+        android:id="@+id/reboot_test"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="重启测试"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        />
 </android.support.constraint.ConstraintLayout>
