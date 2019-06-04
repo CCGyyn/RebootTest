@@ -23,38 +23,15 @@ public class MainActivity extends AppCompatActivity {
 
     private final String TAG = MainActivity.class.getSimpleName();
     Button rebootTest;
-    /*Button setting;
-    Button notify;*/
+    /*Button setting;*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        /*setting = (Button) findViewById(R.id.setting);
-        notify = (Button) findViewById(R.id.notify);*/
+        /*setting = (Button) findViewById(R.id.setting);*/
         rebootTest = (Button) findViewById(R.id.reboot_test);
-        /*notify.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) { // sdk26以上
-                    NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-                    String channelId = "notification_simple";
-                    NotificationChannel channel = new NotificationChannel(
-                            channelId,
-                            "simple",
-                            NotificationManager.IMPORTANCE_DEFAULT
-                    );
-                    manager.createNotificationChannel(channel);
-                    Notification notification = new NotificationCompat.Builder(MainActivity.this, channelId)
-                            .setContentTitle("通知")
-                            .setContentText("测试通知")
-                            .setWhen(System.currentTimeMillis())
-                            .setSmallIcon(R.mipmap.ic_launcher)
-                            .build();
-                    manager.notify(1, notification);
-                }
-            }
-        });
+        /*
         setting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

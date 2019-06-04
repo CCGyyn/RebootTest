@@ -32,11 +32,9 @@ public class MyBootCompleteReceiver extends BroadcastReceiver{
         if(rebootCount == 0) {
 
         } else if(rebootCount < REBOOT_TOTAL_NUM) {
-//            if (intent.getAction().equals(Intent.ACTION_BOOT_COMPLETED)) { // 进入显示弹框的Activity
                 Intent bootBroadcastIntent = new Intent(context, IsRebootTestContinueActivity.class);
                 bootBroadcastIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK); // 防止context.startActivity出现异常
                 context.startActivity(bootBroadcastIntent);
-//            }
         } else { // 达到最大重启次数
             Intent bootBroadcastIntent = new Intent(context, MainActivity.class);
             bootBroadcastIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
