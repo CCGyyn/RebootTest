@@ -18,31 +18,50 @@
         android:text="重启测试"
         app:layout_constraintTop_toBottomOf="@+id/setting"
         />-->
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.3"
+        />
+
     <TextView
         android:id="@+id/times"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="已重启次数："
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
+        android:textSize="20dp"
+        app:layout_constraintLeft_toRightOf="@id/guideline1"
+        app:layout_constraintBottom_toTopOf="@+id/text_times"
+        app:layout_constraintRight_toLeftOf="@+id/have_count"
+        app:layout_constraintTop_toTopOf="parent"
         />
+
     <TextView
         android:id="@+id/have_count"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintLeft_toRightOf="@+id/times"
         android:text="0"
+        android:textSize="20dp"
+        app:layout_constraintLeft_toRightOf="@+id/times"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/reboot_times"
+        app:layout_constraintBaseline_toBaselineOf="@+id/times"
         />
 
     <TextView
         android:id="@+id/text_times"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="设置重启次数"
-        app:layout_constraintLeft_toLeftOf="parent"
+        android:text="设置重启次数:"
+        android:textSize="20dp"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintLeft_toLeftOf="@id/guideline1"
         app:layout_constraintRight_toLeftOf="@+id/reboot_times"
         app:layout_constraintTop_toBottomOf="@+id/times"
-        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintBaseline_toBaselineOf="@+id/reboot_times"
+        app:layout_constraintBottom_toTopOf="@+id/text_interval"
         />
     <EditText
         android:id="@+id/reboot_times"
@@ -52,39 +71,58 @@
         android:maxLength="5"
         android:digits="1234567890"
         app:layout_constraintLeft_toRightOf="@+id/text_times"
-        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/have_count"
         />
 
     <TextView
         android:id="@+id/text_interval"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="52dp"
-        android:text="设置重启间隔"
+        android:text="设置重启间隔:"
+        android:textSize="20dp"
         app:layout_constraintHorizontal_chainStyle="packed"
-        app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toLeftOf="@+id/reboot_interval"
-        app:layout_constraintTop_toBottomOf="@+id/text_times" />
+        app:layout_constraintTop_toBottomOf="@+id/text_times"
+        app:layout_constraintLeft_toLeftOf="@id/guideline1"
+        app:layout_constraintBaseline_toBaselineOf="@+id/reboot_interval"
+        />
 
     <EditText
         android:id="@+id/reboot_interval"
-        android:layout_width="80dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
         android:digits="1234567890"
         android:hint=" 默认3秒 "
         android:maxLength="2"
         app:layout_constraintLeft_toRightOf="@+id/text_interval"
-        app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/reboot_times" />
-    <Button
-        android:id="@+id/reboot_test"
-        android:layout_width="match_parent"
+    <LinearLayout
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="重启测试"
+        android:orientation="vertical"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        />
+        >
+        <Button
+            android:id="@+id/reboot_test"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="重启测试"
+            />
+        <Button
+            android:id="@+id/reset_times"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="重启次数重置"
+            />
+        <Button
+            android:id="@+id/reset_interval"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="重启间隔重置"
+            />
+
+    </LinearLayout>
 </android.support.constraint.ConstraintLayout>

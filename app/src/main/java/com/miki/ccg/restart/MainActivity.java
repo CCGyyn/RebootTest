@@ -22,10 +22,12 @@ import android.widget.Toast;
 
 import com.miki.ccg.restart.util.MobileInfoUtils;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private final String TAG = MainActivity.class.getSimpleName();
     Button rebootTest;
+    Button resetTimes;
+    Button resetInterval;
     EditText rebootInterval;
     EditText rebootTimes;
     TextView haveCount;
@@ -37,9 +39,12 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         /*setting = (Button) findViewById(R.id.setting);*/
         rebootTest = (Button) findViewById(R.id.reboot_test);
+        resetTimes = (Button) findViewById(R.id.reset_times);
+        resetInterval = (Button) findViewById(R.id.reset_interval);
         rebootInterval = (EditText) findViewById(R.id.reboot_interval);
         rebootTimes = (EditText) findViewById(R.id.reboot_times);
         haveCount = (TextView) findViewById(R.id.have_count);
+
         SharedPreferences preferences = getSharedPreferences("data", MODE_PRIVATE);
         int rebootHaveCount = preferences.getInt("rebootCount", 0);
         haveCount.setText(String.valueOf(rebootHaveCount));
@@ -50,56 +55,10 @@ public class MainActivity extends AppCompatActivity {
                 jumpStartInterface();
             }
         });*/
-        rebootTest.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new AlertDialog.Builder(MainActivity.this)
-                        .setTitle("提示")
-                        .setMessage("确认重启么？")
-                        .setPositiveButton("重启", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                // 重启次数
-                                String REBOOT_TOTAL_NUM = rebootTimes.getText().toString();
-                                // 重启间隔
-                                SharedPreferences.Editor editor = getSharedPreferences("data", MODE_PRIVATE)
-                                        .edit();
-                                String REBOOT_INERVAL = rebootInterval.getText().toString();
-                                editor.putInt("rebootCount", 1);
-                                if(!REBOOT_TOTAL_NUM.isEmpty()) {
-                                    editor.putInt("REBOOT_TOTAL_NUM", Integer.parseInt(REBOOT_TOTAL_NUM));
-                                } else {
-                                    editor.putInt("REBOOT_TOTAL_NUM", 5000);
-                                }
-                                if(!REBOOT_INERVAL.isEmpty()) {
-                                    editor.putInt("REBOOT_INERVAL", Integer.parseInt(REBOOT_INERVAL) * 1000);
-                                } else {
-                                    editor.putInt("REBOOT_INERVAL", 3000);
-                                }
-                                editor.putBoolean("rebootFlag", true);
-                                editor.commit();
-                                // 重启
-                                PowerManager powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
-                                powerManager.reboot("重启");
-                                /*String cmd = "su -c reboot";
-                                try {
-                                    myLog("进入try启动runtime");
-                                    Runtime.getRuntime().exec("reboot");
-                                    myLog("执行完成");
-                                } catch (Exception e) {
-                                    Toast.makeText(getApplicationContext(), "Error! Fail to reboot.", Toast.LENGTH_SHORT).show();
-                                }*/
-                            }
-                        })
-                        .setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                // 取消对话框
-                                dialog.cancel();
-                            }
-                        }).show();
-            }
-        });
+        resetTimes.setOnClickListener(this);
+        resetInterval.setOnClickListener(this);
+        rebootTest.setOnClickListener(this);
+
         Intent intent = getIntent();
         int rebootCount = intent.getIntExtra("rebootCount", 0);
         if(rebootCount != 0) {
@@ -148,4 +107,64 @@ public class MainActivity extends AppCompatActivity {
         Log.d(TAG, msg);
     }
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.reset_times:
+                rebootTimes.setText(null);
+                break;
+            case R.id.reset_interval:
+                rebootInterval.setText(null);
+                break;
+            case R.id.reboot_test:
+                new AlertDialog.Builder(MainActivity.this)
+                        .setTitle("提示")
+                        .setMessage("确认重启么？")
+                        .setPositiveButton("重启", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                // 重启次数
+                                String REBOOT_TOTAL_NUM = rebootTimes.getText().toString();
+                                // 重启间隔
+                                SharedPreferences.Editor editor = getSharedPreferences("data", MODE_PRIVATE)
+                                        .edit();
+                                String REBOOT_INERVAL = rebootInterval.getText().toString();
+                                editor.putInt("rebootCount", 1);
+                                if(!REBOOT_TOTAL_NUM.isEmpty()) {
+                                    editor.putInt("REBOOT_TOTAL_NUM", Integer.parseInt(REBOOT_TOTAL_NUM));
+                                } else {
+                                    editor.putInt("REBOOT_TOTAL_NUM", 5000);
+                                }
+                                if(!REBOOT_INERVAL.isEmpty()) {
+                                    editor.putInt("REBOOT_INERVAL", Integer.parseInt(REBOOT_INERVAL) * 1000);
+                                } else {
+                                    editor.putInt("REBOOT_INERVAL", 3000);
+                                }
+                                editor.putBoolean("rebootFlag", true);
+                                editor.commit();
+                                // 重启
+                                PowerManager powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
+                                powerManager.reboot("重启");
+                                /*String cmd = "su -c reboot";
+                                try {
+                                    myLog("进入try启动runtime");
+                                    Runtime.getRuntime().exec("reboot");
+                                    myLog("执行完成");
+                                } catch (Exception e) {
+                                    Toast.makeText(getApplicationContext(), "Error! Fail to reboot.", Toast.LENGTH_SHORT).show();
+                                }*/
+                            }
+                        })
+                        .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                // 取消对话框
+                                dialog.cancel();
+                            }
+                        }).show();
+                break;
+            default:
+                break;
+        }
+    }
 }
