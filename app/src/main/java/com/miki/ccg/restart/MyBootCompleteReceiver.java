@@ -15,7 +15,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 public class MyBootCompleteReceiver extends BroadcastReceiver{
-    public final static int REBOOT_TOTAL_NUM = 3;
+//    public final static int REBOOT_TOTAL_NUM = 3;
     private final String TAG = MyBootCompleteReceiver.class.getSimpleName();
 
     public MyBootCompleteReceiver() {
@@ -27,6 +27,7 @@ public class MyBootCompleteReceiver extends BroadcastReceiver{
         myNotify(context);
         SharedPreferences preferences = context.getSharedPreferences("data", Context.MODE_PRIVATE);
         int rebootCount = preferences.getInt("rebootCount", 0);
+        int REBOOT_TOTAL_NUM = preferences.getInt("REBOOT_TOTAL_NUM", 5000);
         boolean rebootFlag = preferences.getBoolean("rebootFlag", false);
         myLog("rebootCount=" + String.valueOf(rebootCount));
         if(rebootCount == 0) {
@@ -38,6 +39,7 @@ public class MyBootCompleteReceiver extends BroadcastReceiver{
         } else { // 达到最大重启次数
             Intent bootBroadcastIntent = new Intent(context, MainActivity.class);
             bootBroadcastIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            bootBroadcastIntent.putExtra("rebootCount", rebootCount);
             context.startActivity(bootBroadcastIntent);
         }
     }

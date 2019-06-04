@@ -5,6 +5,7 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.PowerManager;
@@ -15,6 +16,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.miki.ccg.restart.util.MobileInfoUtils;
@@ -23,6 +26,9 @@ public class MainActivity extends AppCompatActivity {
 
     private final String TAG = MainActivity.class.getSimpleName();
     Button rebootTest;
+    EditText rebootInterval;
+    EditText rebootTimes;
+    TextView haveCount;
     /*Button setting;*/
 
     @Override
@@ -31,6 +37,12 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         /*setting = (Button) findViewById(R.id.setting);*/
         rebootTest = (Button) findViewById(R.id.reboot_test);
+        rebootInterval = (EditText) findViewById(R.id.reboot_interval);
+        rebootTimes = (EditText) findViewById(R.id.reboot_times);
+        haveCount = (TextView) findViewById(R.id.have_count);
+        SharedPreferences preferences = getSharedPreferences("data", MODE_PRIVATE);
+        int rebootHaveCount = preferences.getInt("rebootCount", 0);
+        haveCount.setText(String.valueOf(rebootHaveCount));
         /*
         setting.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -47,10 +59,23 @@ public class MainActivity extends AppCompatActivity {
                         .setPositiveButton("重启", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                Log.d("MainActivity", "onClick");
+                                // 重启次数
+                                String REBOOT_TOTAL_NUM = rebootTimes.getText().toString();
+                                // 重启间隔
                                 SharedPreferences.Editor editor = getSharedPreferences("data", MODE_PRIVATE)
                                         .edit();
+                                String REBOOT_INERVAL = rebootInterval.getText().toString();
                                 editor.putInt("rebootCount", 1);
+                                if(!REBOOT_TOTAL_NUM.isEmpty()) {
+                                    editor.putInt("REBOOT_TOTAL_NUM", Integer.parseInt(REBOOT_TOTAL_NUM));
+                                } else {
+                                    editor.putInt("REBOOT_TOTAL_NUM", 5000);
+                                }
+                                if(!REBOOT_INERVAL.isEmpty()) {
+                                    editor.putInt("REBOOT_INERVAL", Integer.parseInt(REBOOT_INERVAL) * 1000);
+                                } else {
+                                    editor.putInt("REBOOT_INERVAL", 3000);
+                                }
                                 editor.putBoolean("rebootFlag", true);
                                 editor.commit();
                                 // 重启
@@ -75,6 +100,21 @@ public class MainActivity extends AppCompatActivity {
                         }).show();
             }
         });
+        Intent intent = getIntent();
+        int rebootCount = intent.getIntExtra("rebootCount", 0);
+        if(rebootCount != 0) {
+            new AlertDialog.Builder(MainActivity.this)
+                    .setTitle("提示")
+                    .setMessage("重启次数为:" + String.valueOf(rebootCount))
+                    .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    })
+                    .show();
+        }
+
     }
     /**
      * Jump Start Interface
@@ -107,4 +147,5 @@ public class MainActivity extends AppCompatActivity {
     private void myLog(String msg) {
         Log.d(TAG, msg);
     }
+
 }

@@ -20,7 +20,7 @@ public class IsRebootTestContinueActivity extends AppCompatActivity {
     Context mContext;
     TimerTask task;
     Timer timer;
-    public final static int REBOOT_TOTAL_NUM = 3;
+//    public final static int REBOOT_TOTAL_NUM = 3;
     private final String TAG = IsRebootTestContinueActivity.class.getSimpleName();
 
     @Override
@@ -29,9 +29,11 @@ public class IsRebootTestContinueActivity extends AppCompatActivity {
         setContentView(R.layout.activity_is_reboot_test_continue);
 
         mContext = this;
+        final SharedPreferences preferences = getSharedPreferences("data", MODE_PRIVATE);
+        int rebootCount = preferences.getInt("rebootCount", 0);
         AlertDialog.Builder isSure = new AlertDialog.Builder(this);
         isSure.setTitle("警告");
-        isSure.setMessage("是否确定停止重启测试?");
+        isSure.setMessage("已重启  "+ String.valueOf(rebootCount) + "次，是否确定停止重启测试?");
         isSure.setPositiveButton("确定", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -41,6 +43,8 @@ public class IsRebootTestContinueActivity extends AppCompatActivity {
                 finish();
             }
         });
+        int REBOOT_INERVAL = preferences.getInt("REBOOT_INERVAL", 3000);
+        boolean rebootFlag = preferences.getBoolean("rebootFlag", false);
         // 对话框显示
         dialog = isSure.create();
         dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
@@ -48,10 +52,9 @@ public class IsRebootTestContinueActivity extends AppCompatActivity {
         task = new TimerTask() {
             @Override
             public void run() {
-                dialog.dismiss();
-                SharedPreferences preferences = getSharedPreferences("data", MODE_PRIVATE);
+                int REBOOT_TOTAL_NUM = preferences.getInt("REBOOT_TOTAL_NUM", 5000);
                 int rebootCount = preferences.getInt("rebootCount", 0);
-                boolean rebootFlag = preferences.getBoolean("rebootFlag", false);
+                dialog.dismiss();
                 myLog("rebootCount=" + String.valueOf(rebootCount));
                 if(rebootCount == 0) {
 
@@ -68,13 +71,14 @@ public class IsRebootTestContinueActivity extends AppCompatActivity {
                     myLog(String.valueOf(rebootCount) + "次重启测试结束，启动app");
                     Intent bootBroadcastIntent = new Intent(IsRebootTestContinueActivity.this, MainActivity.class);
                     bootBroadcastIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    bootBroadcastIntent.putExtra("rebootCount", rebootCount);
                     startActivity(bootBroadcastIntent);
                 }
                 finish();
             }
         };
         timer = new Timer();
-        timer.schedule(task, 3000);
+        timer.schedule(task, REBOOT_INERVAL);
     }
 
     @Override
